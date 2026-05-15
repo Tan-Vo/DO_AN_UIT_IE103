@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { useNotification } from '../../context/NotificationContext';
 import { formatCurrency, formatDate } from '../../utils/helpers';
-import { Ticket, Plus, Edit, Trash2, Save } from 'lucide-react';
+import { Ticket, Plus, Edit, Trash2, Save, AlertTriangle } from 'lucide-react';
 
 
 export default function VoucherManagement() {
   const { vouchers, addVoucher, updateVoucher, deleteVoucher } = useData();
   const { showToast } = useNotification();
   const [modal, setModal] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(null);
   const [form, setForm] = useState({});
 
   const openAdd = () => { setForm({ MaVoucher:'', GiaTri:'', KieuGiam:'Percent', DieuKien:'', GiamToiDa:'', NgayBD:'', NgayKT:'', SoLuongMa:'', TrangThai:'Active', DaDung:0 }); setModal('add'); };
@@ -22,7 +23,7 @@ export default function VoucherManagement() {
     setModal(null);
   };
 
-  const handleDelete = (code) => { if (confirm('Xác nhận xóa voucher?')) { deleteVoucher(code); showToast('Đã xóa voucher', 'success'); } };
+  const confirmDelete = () => { if (deleteModal) { deleteVoucher(deleteModal); showToast('Đã xóa voucher', 'success'); setDeleteModal(null); } };
 
   return (
     <div className="slide-up">
@@ -44,7 +45,7 @@ export default function VoucherManagement() {
                   <td>{v.DaDung}/{v.SoLuongMa}</td>
                   <td style={{ fontSize:13 }}>{formatDate(v.NgayBD)} - {formatDate(v.NgayKT)}</td>
                   <td><span className={`badge badge-${v.TrangThai === 'Active' ? 'success' : v.TrangThai === 'Expired' ? 'warning' : 'danger'}`}>{v.TrangThai}</span></td>
-                  <td><div style={{ display:'flex', gap:6 }}><button className="btn btn-secondary btn-sm" onClick={() => openEdit(v)}><Edit size={16} /></button><button className="btn btn-danger btn-sm" onClick={() => handleDelete(v.MaVoucher)}><Trash2 size={16} /></button></div></td>
+                  <td><div style={{ display:'flex', gap:6 }}><button className="btn btn-secondary btn-sm" onClick={() => openEdit(v)}><Edit size={16} /></button><button className="btn btn-danger btn-sm" onClick={() => setDeleteModal(v.MaVoucher)}><Trash2 size={16} /></button></div></td>
                 </tr>
               ))}
             </tbody>
@@ -72,6 +73,26 @@ export default function VoucherManagement() {
               <div className="form-group"><label className="form-label">Số lượng mã</label><input className="input" type="number" value={form.SoLuongMa||''} onChange={e => setForm({...form, SoLuongMa:e.target.value})} /></div>
             </div>
             <div className="modal-footer"><button className="btn btn-secondary" onClick={() => setModal(null)}>Hủy</button><button className="btn btn-primary" onClick={handleSave} style={{ display:'flex', alignItems:'center', gap:6 }}><Save size={18} /> Lưu</button></div>
+          </div>
+        </div>
+      )}
+
+      {deleteModal && (
+        <div className="modal-overlay" onClick={() => setDeleteModal(null)}>
+          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 400 }}>
+            <div className="modal-header">
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--danger)' }}>
+                <AlertTriangle size={20} /> Xác nhận xóa
+              </h3>
+              <button className="btn btn-icon btn-secondary" onClick={() => setDeleteModal(null)}>✕</button>
+            </div>
+            <div className="modal-body">
+              <p style={{ margin: 0, color: 'var(--text-muted)' }}>Bạn có chắc chắn muốn xóa voucher này không? Hành động này không thể hoàn tác.</p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" onClick={() => setDeleteModal(null)}>Hủy</button>
+              <button className="btn btn-danger" onClick={confirmDelete} style={{ display:'flex', alignItems:'center', gap:6 }}><Trash2 size={18} /> Xóa</button>
+            </div>
           </div>
         </div>
       )}

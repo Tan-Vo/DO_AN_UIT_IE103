@@ -11,6 +11,7 @@ export default function ProductManagement() {
   const [search, setSearch] = useState('');
   const [catFilter, setCatFilter] = useState('');
   const [modal, setModal] = useState(null); // null | 'add' | product object
+  const [deleteModal, setDeleteModal] = useState(null);
   const [form, setForm] = useState({});
   const [page, setPage] = useState(1);
   const perPage = 10;
@@ -34,8 +35,8 @@ export default function ProductManagement() {
     setModal(null);
   };
 
-  const handleDelete = (id) => {
-    if (confirm('Xác nhận xóa sản phẩm này?')) { deleteProduct(id); showToast('Đã xóa sản phẩm','success'); }
+  const confirmDelete = () => {
+    if (deleteModal) { deleteProduct(deleteModal); showToast('Đã xóa sản phẩm','success'); setDeleteModal(null); }
   };
 
   return (
@@ -67,7 +68,7 @@ export default function ProductManagement() {
                   <td style={{ color:'var(--text-muted)', textDecoration:'line-through' }}>{formatCurrency(p.GiaGoc)}</td>
                   <td><span style={{ display:'flex', alignItems:'center', gap:6, color: p.SoLuongTon < 5 ? 'var(--danger)' : p.SoLuongTon < 10 ? 'var(--warning)' : 'var(--success)', fontWeight:600 }}>{p.SoLuongTon}{p.SoLuongTon < 5 && <AlertTriangle size={14} />}</span></td>
                   <td><span className={`badge badge-${p.TrangThai === 'Active' ? 'success' : 'danger'}`}>{p.TrangThai}</span></td>
-                  <td><div style={{ display:'flex', gap:6 }}><button className="btn btn-secondary btn-sm" onClick={() => openEdit(p)}><Edit size={16} /></button><button className="btn btn-danger btn-sm" onClick={() => handleDelete(p.MaSP)}><Trash2 size={16} /></button></div></td>
+                  <td><div style={{ display:'flex', gap:6 }}><button className="btn btn-secondary btn-sm" onClick={() => openEdit(p)}><Edit size={16} /></button><button className="btn btn-danger btn-sm" onClick={() => setDeleteModal(p.MaSP)}><Trash2 size={16} /></button></div></td>
                 </tr>
               ))}
             </tbody>
@@ -101,6 +102,26 @@ export default function ProductManagement() {
               <div className="form-group"><label className="form-label">Emoji icon</label><input className="input" value={form.HinhAnh||''} onChange={e => setForm({...form, HinhAnh:e.target.value})} /></div>
             </div>
             <div className="modal-footer"><button className="btn btn-secondary" onClick={() => setModal(null)}>Hủy</button><button className="btn btn-primary" onClick={handleSave} style={{ display:'flex', alignItems:'center', gap:6 }}><Save size={18} /> Lưu</button></div>
+          </div>
+        </div>
+      )}
+
+      {deleteModal && (
+        <div className="modal-overlay" onClick={() => setDeleteModal(null)}>
+          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 400 }}>
+            <div className="modal-header">
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--danger)' }}>
+                <AlertTriangle size={20} /> Xác nhận xóa
+              </h3>
+              <button className="btn btn-icon btn-secondary" onClick={() => setDeleteModal(null)}>✕</button>
+            </div>
+            <div className="modal-body">
+              <p style={{ margin: 0, color: 'var(--text-muted)' }}>Bạn có chắc chắn muốn xóa sản phẩm này không? Hành động này không thể hoàn tác.</p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" onClick={() => setDeleteModal(null)}>Hủy</button>
+              <button className="btn btn-danger" onClick={confirmDelete} style={{ display:'flex', alignItems:'center', gap:6 }}><Trash2 size={18} /> Xóa</button>
+            </div>
           </div>
         </div>
       )}

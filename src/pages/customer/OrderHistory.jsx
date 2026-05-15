@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import { useNotification } from '../../context/NotificationContext';
 import { formatCurrency, formatDate, getStatusColor } from '../../utils/helpers';
-import { ClipboardList, PackageX, X, Check } from 'lucide-react';
+import { ClipboardList, PackageX, X, Check, AlertTriangle } from 'lucide-react';
 
 
 const STATUS_FLOW = ['Chờ xác nhận', 'Đang xử lý', 'Đang giao', 'Hoàn thành'];
@@ -14,14 +14,16 @@ export default function OrderHistory() {
   const { showToast } = useNotification();
   const [statusFilter, setStatusFilter] = useState('');
   const [detail, setDetail] = useState(null);
+  const [cancelModal, setCancelModal] = useState(null);
 
   const myOrders = orders.filter(o => o.MaKH === user.id).sort((a,b) => new Date(b.NgayDat) - new Date(a.NgayDat));
   const filtered = statusFilter ? myOrders.filter(o => o.TrangThai === statusFilter) : myOrders;
 
-  const handleCancel = (id) => {
-    if (confirm('Bạn có chắc muốn hủy đơn hàng này?')) {
-      updateOrderStatus(id, 'Đã hủy');
+  const confirmCancel = () => {
+    if (cancelModal) {
+      updateOrderStatus(cancelModal, 'Đã hủy');
       showToast('Đã hủy đơn hàng', 'success');
+      setCancelModal(null);
       setDetail(null);
     }
   };
@@ -105,8 +107,28 @@ export default function OrderHistory() {
               <div style={{ textAlign:'right', marginTop:12, fontSize:18, fontWeight:700, color:'var(--accent-light)' }}>Tổng: {formatCurrency(detail.TongTien)}</div>
 
               {orders.find(o=>o.MaDH===detail.MaDH)?.TrangThai === 'Chờ xác nhận' && (
-                <button className="btn btn-danger" style={{ width:'100%', marginTop:16, display:'flex', alignItems:'center', justifyContent:'center', gap:8 }} onClick={() => handleCancel(detail.MaDH)}><X size={18} /> Hủy đơn hàng</button>
+                <button className="btn btn-danger" style={{ width:'100%', marginTop:16, display:'flex', alignItems:'center', justifyContent:'center', gap:8 }} onClick={() => setCancelModal(detail.MaDH)}><X size={18} /> Hủy đơn hàng</button>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {cancelModal && (
+        <div className="modal-overlay" onClick={() => setCancelModal(null)} style={{ zIndex: 1100 }}>
+          <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 400 }}>
+            <div className="modal-header">
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--danger)' }}>
+                <AlertTriangle size={20} /> Xác nhận hủy
+              </h3>
+              <button className="btn btn-icon btn-secondary" onClick={() => setCancelModal(null)}>✕</button>
+            </div>
+            <div className="modal-body">
+              <p style={{ margin: 0, color: 'var(--text-muted)' }}>Bạn có chắc chắn muốn hủy đơn hàng này không? Hành động này không thể hoàn tác.</p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" onClick={() => setCancelModal(null)}>Trở lại</button>
+              <button className="btn btn-danger" onClick={confirmCancel} style={{ display:'flex', alignItems:'center', gap:6 }}><X size={18} /> Hủy đơn</button>
             </div>
           </div>
         </div>
