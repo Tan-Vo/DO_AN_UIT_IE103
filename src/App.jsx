@@ -12,6 +12,7 @@ import CustomerManagement from './pages/admin/CustomerManagement';
 import OrderManagement from './pages/admin/OrderManagement';
 import VoucherManagement from './pages/admin/VoucherManagement';
 import Reports from './pages/admin/Reports';
+import Help from './pages/admin/Help';
 import Home from './pages/customer/Home';
 import ProductDetail from './pages/customer/ProductDetail';
 import Cart from './pages/customer/Cart';
@@ -38,6 +39,7 @@ function AppRoutes() {
         <Route path="orders" element={<OrderManagement />} />
         <Route path="vouchers" element={<VoucherManagement />} />
         <Route path="reports" element={<Reports />} />
+        <Route path="help" element={<Help />} />
       </Route>
       <Route path="/" element={<ProtectedRoute role="customer"><CustomerLayout /></ProtectedRoute>}>
         <Route index element={<Home />} />
@@ -46,6 +48,7 @@ function AppRoutes() {
         <Route path="checkout" element={<Checkout />} />
         <Route path="orders" element={<OrderHistory />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="help" element={<Help />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>

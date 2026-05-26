@@ -1,7 +1,7 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import { ShoppingBag, Home, ClipboardList, ShoppingCart, User, LogOut } from 'lucide-react';
+import { ShoppingBag, Home, ClipboardList, ShoppingCart, User, LogOut, HelpCircle } from 'lucide-react';
 
 
 export default function CustomerLayout() {
@@ -22,6 +22,7 @@ export default function CustomerLayout() {
             <ShoppingCart size={18} style={{ verticalAlign:'middle', marginRight:4 }}/> <span>Giỏ hàng</span>
             {itemCount > 0 && <span className="count">{itemCount}</span>}
           </Link>
+          <Link to="/help"><HelpCircle size={18} style={{ verticalAlign:'middle', marginRight:4 }}/> <span>Trợ giúp</span></Link>
           <Link to="/profile"><User size={18} style={{ verticalAlign:'middle', marginRight:4 }}/> <span>{user?.profile?.TenKH}</span></Link>
           <button className="btn btn-secondary btn-sm" onClick={handleLogout}><LogOut size={16} style={{ verticalAlign:'middle', marginRight:4 }}/> Đăng xuất</button>
         </div>
