@@ -349,15 +349,27 @@ a:hover { color: var(--accent); }
 
 /* ===== SIDEBAR GROUPS ===== */
 .sidebar-group {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sidebar-group:not(:first-child) {
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 .sidebar-group-title {
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--text-muted);
-  padding: 0 16px 6px;
-  letter-spacing: 0.08em;
+  color: var(--accent-light);
+  opacity: 0.8;
+  padding: 0 16px 8px;
+  letter-spacing: 0.1em;
+}
+.sidebar-group .nav-item {
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
 /* ===== HELP PAGE STYLES ===== */
