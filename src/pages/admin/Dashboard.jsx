@@ -40,7 +40,30 @@ export default function Dashboard() {
     datasets: [{ label: 'Số lượng bán', data: topProducts.map(p => p.qty), backgroundColor: ['#6c5ce7','#00b894','#fd79a8','#fdcb6e','#74b9ff'], borderRadius: 6 }]
   };
 
-  const chartOpts = { responsive: true, plugins: { legend: { labels: { color:'#a0a0b8' } } }, scales: { x: { ticks: { color:'#6b6b80' }, grid: { color:'rgba(255,255,255,0.05)' } }, y: { ticks: { color:'#6b6b80' }, grid: { color:'rgba(255,255,255,0.05)' } } } };
+  const chartOpts = {
+    responsive: true,
+    plugins: { legend: { labels: { color:'#a0a0b8' } } },
+    scales: {
+      x: {
+        ticks: {
+          color: '#6b6b80',
+          callback: function(value) {
+            return this.type === 'linear' ? value.toLocaleString('vi-VN') : this.getLabelForValue(value);
+          }
+        },
+        grid: { color: 'rgba(255,255,255,0.05)' }
+      },
+      y: {
+        ticks: {
+          color: '#6b6b80',
+          callback: function(value) {
+            return this.type === 'linear' ? value.toLocaleString('vi-VN') : this.getLabelForValue(value);
+          }
+        },
+        grid: { color: 'rgba(255,255,255,0.05)' }
+      }
+    }
+  };
 
   const recentOrders = [...orders].sort((a,b) => new Date(b.NgayDat) - new Date(a.NgayDat)).slice(0, 5);
 

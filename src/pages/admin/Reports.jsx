@@ -10,7 +10,30 @@ export default function Reports() {
   const { orders, orderDetails, products, customers, categories, paymentMethods, shippingProviders } = useData();
   const [tab, setTab] = useState('revenue');
 
-  const chartOpts = { responsive: true, plugins: { legend: { labels: { color:'#a0a0b8' } } }, scales: { x: { ticks: { color:'#6b6b80' }, grid: { color:'rgba(255,255,255,0.05)' } }, y: { ticks: { color:'#6b6b80' }, grid: { color:'rgba(255,255,255,0.05)' } } } };
+  const chartOpts = {
+    responsive: true,
+    plugins: { legend: { labels: { color:'#a0a0b8' } } },
+    scales: {
+      x: {
+        ticks: {
+          color: '#6b6b80',
+          callback: function(value) {
+            return this.type === 'linear' ? value.toLocaleString('vi-VN') : this.getLabelForValue(value);
+          }
+        },
+        grid: { color: 'rgba(255,255,255,0.05)' }
+      },
+      y: {
+        ticks: {
+          color: '#6b6b80',
+          callback: function(value) {
+            return this.type === 'linear' ? value.toLocaleString('vi-VN') : this.getLabelForValue(value);
+          }
+        },
+        grid: { color: 'rgba(255,255,255,0.05)' }
+      }
+    }
+  };
   const pieOpts = { responsive: true, plugins: { legend: { position:'bottom', labels: { color:'#a0a0b8' } } } };
   const colors = ['#6c5ce7','#00b894','#fd79a8','#fdcb6e','#74b9ff','#e17055'];
 
