@@ -168,12 +168,12 @@ export default function Help() {
               <span className="about-label"><User size={14} style={{ verticalAlign: 'middle', marginRight: 4 }} /> Thành viên thực hiện</span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 6 }}>
                 <div className="about-val" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.04)', paddingBottom: 6 }}>
-                  <span>1. [Họ và tên Sinh viên 1]</span>
-                  <span style={{ color: 'var(--text-muted)' }}>MSSV: [MSSV 1]</span>
+                  <span>1. [Võ Đình Tân]</span>
+                  <span style={{ color: 'var(--text-muted)' }}>MSSV: [24521588]</span>
                 </div>
                 <div className="about-val" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>2. [Họ và tên Sinh viên 2]</span>
-                  <span style={{ color: 'var(--text-muted)' }}>MSSV: [MSSV 2]</span>
+                  <span>2. [Nguyễn Tài]</span>
+                  <span style={{ color: 'var(--text-muted)' }}>MSSV: [24521559]</span>
                 </div>
               </div>
             </div>
